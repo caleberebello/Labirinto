@@ -23,27 +23,6 @@ void imprimeLabirinto(int M[MAX][MAX], int n, int m) {
 	}
 }
 
-void obtemLabirinto(int M[MAX][MAX], int *n, int *m,int *Li, int *Ci, int *Lf, int *Cf) {
-	int i, j, d;
-//	/*scanf("%d %d", n, m); /* dimensoes do labirinto */
-//	scanf("%d %d", Li, Ci); /* coordenadas da posicao inicial */
-//	scanf("%d %d", Lf, Cf); /* coordeandas da posicao final (saida) */
-	/* labirinto: 1 = parede ou obstaculo
-	 0 = posicao livre */
- 	srand(time(NULL));
-	for (i = 0; i < *n; i++){
-		for (j = 0; j < *m; j++) {
-		   	d = (rand() % 1000);
-		   	//printf("d = %d",d);
-			if (d == 1){
-			   	M[i][j] = -2;
-			}
-			else{
-				M[i][j] = -1;
-			}
-		}
-	}
-}
 
 int labirinto(int M[MAX][MAX], int deltaL[], int deltaC[],int Li, int Ci, int Lf, int Cf) {
 	int L, C, k, passos;
@@ -57,10 +36,12 @@ int labirinto(int M[MAX][MAX], int deltaL[], int deltaC[],int Li, int Ci, int Lf
 		L = Li + deltaL[k];
 		C = Ci + deltaC[k];
 	//8	printf("--->L = %d, deltaL = %d, C = %d, deltaC = %d\n",L,deltaL[k],C,deltaC[k]);
-	/* verifica se o movimento eh valido e gera uma solucao factivel */
+	/* verifica se o movimento eh valido e gera uma solucao */
 		if (M[L][C] == -1) { // nao visitou ainda
+			printf("--->M[L][C]%d\n",M[L][C]);
 			M[L][C] = M[Li][Ci] + 1;
 			passos = labirinto(M, deltaL, deltaC, L, C, Lf, Cf);
+			printf("passos = %d\n",passos);
 			if (passos > 0){
 				return passos;
 			}
@@ -117,7 +98,7 @@ int main() {
 
 	/* tenta encontrar um caminho no labirinto */
 	resposta = labirinto(M, deltaL, deltaC, Li, Ci, Lf, Cf);
-	printf("resposta %d\n",resposta);
+	printf("resposta = %d\n",resposta);
 	if ((resposta == 0)||(M[Li][Ci]== -2)){
 		printf("Nao existe solucao.\n");
 		imprimeLabirinto(M, n, m);
