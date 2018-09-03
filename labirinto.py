@@ -1,5 +1,6 @@
 from random import *
 
+#função para criar o labirinto
 def criar_matriz(m,n):
     matriz = []
     for i in range(m):
@@ -8,49 +9,42 @@ def criar_matriz(m,n):
             r = randint(0,1)
             linha.append(r)
         matriz.append(linha)
-    if r == 1:
-        matriz[i][j] = -2
-    else:
-        matriz[i][j] = -1
+    matriz[0][0] = 0
+    matriz[9][9] = 0
     return matriz
 
-def imprimir_matriz(matriz, m, n):
-    for i in range(m):
-        for j in range(n):
-            if matriz[i][j] == -2:
-                print("|XX|")
-            if matriz[i][j] == -1:
-                print("|00|")
-            if matriz[i][j] >= 0:
-                print("%02d", matriz[i][j])
-    return matriz
-                
-def labirinto(matriz, deltaL, deltaC, Li, Lf, Ci, Cf):
+#verificar movimentações
+def labirinto(matriz, movL, movC, Li, Lf, Ci, Cf):
+    passos = 0
     if Li == Lf and Ci == Cf:
+        passos = passos + 1
+        matriz[Li][Ci] = 9
         return matriz[Li][Ci]
+
     for i in range(4):
-        L = Li + deltaL[i]
-        C = Ci + deltaC[i]
-        if matriz[L][C] == -1:
+        L = Li + movL[i]
+        C = Ci + movC[i]
+        if matriz[L][C] == 0:
             matriz[L][C] = matriz[Li][Ci] + 1
-            passos = labirinto(matriz, deltaL, deltaC, Li, Lf, Ci, Cf)
+            passos = labirinto(matriz, movL, movC, Li, Lf, Ci, Cf)
             if passos > 0:
                 return passos
     return 0
 
-m = 10
-n = 10
-Li=0
-Ci=0
-Lf=9
-Cf=9
+#main
+m, n = 10, 10
+Li, Ci, Lf, Cf = 0, 0, 9, 9
 lab = criar_matriz(m,n)
-deltaL = [0, +1, 0, -1]
-deltaC = [+1, 0, -1, 0]
-resposta = labirinto(lab, deltaL, deltaC, Li, Lf, Ci, Cf)
+movL = [0, +1, 0, -1]
+movC = [+1, 0, -1, 0]
+resposta = labirinto(lab, movL, movC, Li, Lf, Ci, Cf)
 
 if resposta == 0:
     print("Não existe solução")
+    for i in range(10):
+        print(lab[i])
+
 else:
-    print("Existe uma solução em" + resposta + " passos")
-    imprimir_matriz(lab, m, n)
+    print("Existe uma solução em %d passos" % resposta)
+    for i in range(10):
+        print(lab[i])
