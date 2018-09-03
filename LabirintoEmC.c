@@ -9,13 +9,14 @@ void imprimeLabirinto(int M[MAX][MAX], int n, int m) {
 	for (i = 0; i < n; i++) {
 		for (j = 0; j < m; j++) {
 			if (M[i][j] == -2){
-				printf("|XX|");
+				printf("|  |");
 			}
 			if (M[i][j] == -1){
-			 printf("|00|");
+				printf("|00|");
 			}
 			if (M[i][j] >= 0) {
 				printf("|%02d|", M[i][j]);
+				//printf("|00|");
 			}
 		}
 		printf("\n");
@@ -32,7 +33,7 @@ void obtemLabirinto(int M[MAX][MAX], int *n, int *m,int *Li, int *Ci, int *Lf, i
  	srand(time(NULL));
 	for (i = 0; i < *n; i++){
 		for (j = 0; j < *m; j++) {
-		   	d = (rand() % 50);
+		   	d = (rand() % 1000);
 		   	//printf("d = %d",d);
 			if (d == 1){
 			   	M[i][j] = -2;
@@ -48,8 +49,9 @@ int labirinto(int M[MAX][MAX], int deltaL[], int deltaC[],int Li, int Ci, int Lf
 	int L, C, k, passos;
 	printf("Li = %d, Ci = %d, Lf = %d, Cf = %d\n",Li,Ci,Lf,Cf);
 	if ((Li == Lf) && (Ci == Cf)){
+		printf("M[Li][Ci] = %d\n",M[Li][Ci]);
 		return M[Li][Ci];
-	/* testa todos os movimentos a partir da posicao atual */
+		/* testa todos os movimentos a partir da posicao atual */
 	}
 	for (k = 0; k < 4; k++) {
 		L = Li + deltaL[k];
@@ -69,7 +71,7 @@ int labirinto(int M[MAX][MAX], int deltaL[], int deltaC[],int Li, int Ci, int Lf
 }
 
 int main() {
-	int M[MAX][MAX], resposta, n=10, m=10, Li=0, Ci=0, Lf=9, Cf=9,k,l;
+	int M[MAX][MAX], resposta, n=10, m=10, Li=1, Ci=1, Lf=8, Cf=8,k,l;
 	printf("n = %d,m = %d, Li= %d, Ci = %d, Lf = %d, Cf = %d, ",n,m,Li,Ci,Lf,Cf);
 	/* define os movimentos validos no labirinto */
 	int deltaL[4] = { 0, +1, 0, -1}; //possiveis posicoes em linha
@@ -78,22 +80,27 @@ int main() {
 	
 //	obtemLabirinto(M, &n, &m, &Li, &Ci, &Lf, &Cf);
 	int i, j, d;
-//	/*scanf("%d %d", n, m); /* dimensoes do labirinto */
-//	scanf("%d %d", Li, Ci); /* coordenadas da posicao inicial */
-//	scanf("%d %d", Lf, Cf); /* coordeandas da posicao final (saida) */
+/* n,m dimensoes do labirinto */
+/* Li,Ci coordenadas da posicao inicial */
+/* Lf, Cf coordeandas da posicao final (saida) */
 	/* labirinto: 1 = parede ou obstaculo
 	 0 = posicao livre */
  	srand(time(NULL));
 	for (i = 0; i < n; i++){
 		for (j = 0; j < m; j++) {
-		   	d = (rand() % 4);
-		   	//printf("d = %d",d);
-			if (d == 1){
-			   	M[i][j] = -2;
+			if((i==0)||(i==9)||(j==0)||(j==9)){
+				M[i][j] = -2;
 			}
 			else{
-				M[i][j] = -1;
+		   		d = (rand() % 3);
+		   		//printf("d = %d",d);
+				if (d == 1){
+			   		M[i][j] = -2;
+				}
+				else{
+					M[i][j] = -1;
 				
+				}
 			}
 		}
 	}
@@ -110,9 +117,10 @@ int main() {
 
 	/* tenta encontrar um caminho no labirinto */
 	resposta = labirinto(M, deltaL, deltaC, Li, Ci, Lf, Cf);
-
-	if (resposta == 0){
+	printf("resposta %d\n",resposta);
+	if ((resposta == 0)||(M[Li][Ci]== -2)){
 		printf("Nao existe solucao.\n");
+		imprimeLabirinto(M, n, m);
 	}
 	else {
 		printf("Existe uma solucao em %d passos.\n", resposta);
