@@ -1,3 +1,7 @@
+//Calebe Roberto
+//Paulo Marinho
+//Nickso Calheiros
+
 #include<stdio.h>
 #include<stdlib.h>
 #include <time.h>
