@@ -1,3 +1,6 @@
+#Calebe Roberto
+#Paulo Marinho
+#Nickso Calheiros
 from random import *
 
 #função para criar o labirinto
